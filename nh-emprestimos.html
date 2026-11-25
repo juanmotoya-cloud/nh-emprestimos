@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nh Empréstimos</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap">
+<style>
+:root{color-scheme:dark;--bg:#000;--surf:#0d0d0d;--ink:#f2f2f2;--mut:#a9a9a9;--line:#3b3220;--fill:#1c1c1c;--acc:#f5b800;--ok:#6fcf8f;--err:#ff7a6b}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{background:var(--surf);color:var(--ink);font:14px/1.45 Manrope,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;display:flex;justify-content:center}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.app{position:relative;width:100%;height:100vh;height:100dvh;max-width:560px;background:var(--surf);display:flex;flex-direction:column;overflow:hidden;padding-top:env(safe-area-inset-top,0px)}
+.bar{display:flex;justify-content:space-between;padding:10px 20px 2px;font-size:11px;color:var(--mut)}
+.body{flex:1;overflow-y:auto;padding:22px 20px 20px}
+.body::-webkit-scrollbar{display:none}
+h1{font-size:19px;margin:6px 0 2px;font-weight:800}
+small,.mut{color:var(--mut);font-size:12px}
+.big{font-size:30px;font-weight:800;color:var(--acc);letter-spacing:-.5px}
+.logo{margin:34px 0 6px;text-align:center;color:var(--acc);font-weight:800;font-size:22px;letter-spacing:1px}
+.btn{display:block;width:100%;text-align:center;padding:13px;border:2px solid var(--acc);background:var(--acc);color:#000;border-radius:8px;font-weight:800;font-size:14px;margin-top:12px;transition:transform .1s}
+.btn:active{transform:scale(.98)}
+.btn.o{background:none;color:var(--acc)}
+.btn:disabled{opacity:.4}
+.card{border:1px solid var(--line);border-radius:10px;padding:14px;margin-top:14px;background:#111}
+.card.hl{border-color:var(--acc)}
+label{display:block;font-size:12px;color:var(--mut);margin-top:12px}
+input[type=text],input[type=password]{width:100%;margin-top:5px;padding:12px;background:var(--fill);border:1px solid var(--line);border-radius:8px;color:var(--ink);font:inherit}
+.err{color:var(--err);font-size:12px;margin-top:6px;min-height:16px}
+.link{background:none;border:0;color:var(--acc);font-size:12px;padding:6px 0}
+.prog{height:8px;background:var(--fill);border-radius:4px;margin:10px 0 4px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--acc);border-radius:4px;transition:width .5s}
+.head{display:flex;justify-content:space-between;align-items:center}
+.avatar{width:38px;height:38px;border-radius:50%;background:var(--fill);border:1px solid var(--acc);display:grid;place-items:center;font-weight:800;color:var(--acc)}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.grid4 button{background:none;border:0;font-size:11px;color:var(--mut)}
+.grid4 i{display:grid;place-items:center;height:48px;border:1px solid var(--line);border-radius:10px;margin-bottom:5px;background:var(--fill);font-style:normal;font-size:19px}
+.tabs{display:flex;border-top:1px solid var(--line);padding:8px 6px calc(10px + env(safe-area-inset-bottom,0px))}
+.tabs button{flex:1;background:none;border:0;font-size:10px;color:var(--mut)}
+.tabs i{display:grid;place-items:center;width:26px;height:26px;border:1px solid var(--line);border-radius:7px;margin:0 auto 3px;font-style:normal;font-size:13px}
+.tabs .on{color:var(--acc)}.tabs .on i{border-color:var(--acc)}
+input[type=range]{width:100%;accent-color:var(--acc);margin:14px 0 4px}
+.chips{display:flex;gap:6px;margin-top:8px}
+.chips button{flex:1;padding:8px 0;border:1px solid var(--line);border-radius:16px;background:none;color:var(--mut);font-size:12px}
+.chips .on{border-color:var(--acc);color:var(--acc);font-weight:800}
+.res{display:flex;justify-content:space-between;gap:6px}
+.res b{display:block;font-size:15px}
+.steps{display:flex;gap:6px;margin-bottom:12px}
+.steps i{flex:1;height:4px;border-radius:2px;background:var(--fill)}
+.steps i.on{background:var(--acc)}
+.up{display:flex;align-items:center;justify-content:center;gap:8px;height:84px;margin-top:10px;border:1px dashed var(--line);border-radius:8px;background:var(--fill);color:var(--mut);font-size:12px;width:100%}
+.up.done{border-style:solid;border-color:var(--ok);color:var(--ok)}
+.par{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);font-size:13px;gap:8px}
+.par span:first-child{flex:1}
+.tag{border:1px solid var(--line);border-radius:10px;padding:2px 9px;font-size:10px;color:var(--mut)}
+.tag.a{border-color:var(--acc);color:var(--acc)}.tag.p{border-color:var(--ok);color:var(--ok)}
+.sheet{position:absolute;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:flex-end;z-index:5;animation:f .2s}
+.sheet>div{width:100%;background:var(--surf);border-top:2px solid var(--acc);border-radius:22px 22px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom,0px));animation:u .25s}
+.pix{margin:12px 0;padding:12px;background:var(--fill);border-radius:8px;font-size:11px;word-break:break-all;color:var(--mut)}
+.toast{position:absolute;left:18px;right:18px;bottom:84px;background:var(--acc);color:#000;font-weight:800;padding:12px;border-radius:8px;text-align:center;z-index:9;animation:u .25s}
+.ant{display:flex;align-items:center;gap:10px}
+.ant input{accent-color:var(--acc);width:18px;height:18px}
+.ok{width:64px;height:64px;border-radius:50%;border:2px solid var(--acc);display:grid;place-items:center;font-size:30px;color:var(--acc);margin:40px auto 14px}
+@keyframes f{from{opacity:0}}@keyframes u{from{transform:translateY(24px);opacity:0}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<script>
+const R=v=>v.toLocaleString('pt-BR',{style:'currency',currency:'BRL',minimumFractionDigits:2});
+const R0=v=>v.toLocaleString('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0});
+const RATE=0.0249;
+const pmt=(p,n,i=RATE)=>p*i/(1-Math.pow(1+i,-n));
+const dt=(m)=>{const d=new Date();d.setMonth(d.getMonth()+m);d.setDate(10);return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})};
+const S={
+  view:'login',user:{name:'Cliente'},total:15000,
+  sim:{v:5000,n:12},req:{step:1,docs:[false,false,false],ok:false},
+  c:{n:12,paid:5,pm:pmt(5000,12),sel:[]},
+  modal:null,toast:null,err:''
+};
+const $=s=>document.querySelector(s);
+const saldo=()=>(S.c?(S.c.n-S.c.paid)*S.c.pm:0);
+const avail=()=>Math.max(0,S.total-saldo());
+const mask=v=>{v=v.replace(/\D/g,'').slice(0,11);return v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2')};
+const cpfOk=v=>{const d=v.replace(/\D/g,'');return d.length===11};
+function toast(t){S.toast=t;draw();setTimeout(()=>{S.toast=null;draw()},2200)}
+function go(v){S.view=v;S.modal=null;draw();$('.body')&&($('.body').scrollTop=0)}
+const tabs=[['home','Início','⌂'],['sim','Simular','%'],['contracts','Contratos','▤'],['profile','Perfil','☺']];
+function tabbar(){return`<nav class="tabs">${tabs.map(t=>`<button class="${S.view===t[0]?'on':''}" onclick="go('${t[0]}')"><i>${t[2]}</i>${t[1]}</button>`).join('')}</nav>`}
+const bar='';
+
+const V={
+login:()=>`<div class="body" style="display:flex;flex-direction:column">
+ <div class="logo">Nh EMPRÉSTIMOS</div>
+ <p class="mut" style="text-align:center;margin:0 0 28px">Realizando seus planos</p>
+ <label for="cpf">CPF</label><input id="cpf" type="text" inputmode="numeric" placeholder="000.000.000-00" oninput="this.value=mask(this.value)">
+ <label for="pw">Senha</label><input id="pw" type="password" placeholder="••••••••">
+ <div class="err" id="err">${S.err}</div>
+ <button class="link" style="align-self:flex-end" onclick="toast('Enviamos um link de recuperação para seu e-mail')">Esqueci minha senha</button>
+ <button class="btn" onclick="login()">Entrar</button>
+ <button class="btn o" onclick="toast('Cadastro disponível em breve')">Criar conta</button>
+ <small style="margin-top:auto;text-align:center;padding-top:20px">Termos · Privacidade</small></div>`,
+
+home:()=>{const pct=Math.min(100,saldo()/S.total*100);const next=S.c&&S.c.paid<S.c.n;
+ return bar+`<div class="body">
+ <div class="head"><div><small>Olá,</small><br><b style="font-size:16px">${S.user.name}</b></div><div class="avatar">${S.user.name[0]}</div></div>
+ <div class="card hl"><small>Limite disponível</small><div class="big">${R0(avail())}</div><div class="prog"><i style="width:${100-pct}%"></i></div><small>de ${R0(S.total)} no total</small></div>
+ <button class="btn" onclick="go('sim')">Simular empréstimo</button>
+ <div class="grid4"><button onclick="go('sim')"><i>＋</i>Solicitar</button><button onclick="go('contracts')"><i>▦</i>Parcelas</button><button onclick="go('contracts')"><i>▤</i>Contratos</button><button onclick="toast('Fale conosco: 0800 000 0000')"><i>?</i>Ajuda</button></div>
+ <div class="card"><small>Próxima parcela</small><div class="par" style="border:0;padding:6px 0 0">${next?`<b style="font-size:18px">${R(S.c.pm)}</b><span class="tag a">vence ${dt(0)}</span>`:'<span class="mut">Nenhuma parcela em aberto</span>'}</div></div>
+ </div>`+tabbar()},
+
+sim:()=>{const {v,n}=S.sim;const p=pmt(v,n);
+ return bar+`<div class="body"><h1>Simule seu empréstimo</h1><small>Sem compromisso. Veja o custo total antes de pedir.</small>
+ <label style="margin-top:18px">Quanto você precisa?</label><div class="big" id="sv">${R0(v)}</div>
+ <input type="range" min="1000" max="${Math.max(1000,Math.floor(avail()/500)*500)}" step="500" value="${v}" aria-label="Valor" oninput="S.sim.v=+this.value;upd()">
+ <div class="head"><small>R$ 1.000</small><small>${R0(Math.max(1000,Math.floor(avail()/500)*500))}</small></div>
+ <label style="margin-top:18px">Em quantas parcelas?</label>
+ <div class="chips">${[6,12,18,24].map(x=>`<button class="${x===n?'on':''}" onclick="S.sim.n=${x};draw()">${x}x</button>`).join('')}</div>
+ <div class="card"><div class="res" id="res"></div></div>
+ <button class="btn" onclick="S.req={step:1,docs:[false,false,false],ok:false};go('req')">Solicitar agora</button></div>`+tabbar()},
+
+req:()=>{const r=S.req;const {v,n}=S.sim;
+ if(r.ok)return`<div class="body" style="text-align:center"><div class="ok">✓</div><h1>Solicitação enviada</h1><p class="mut">Analisamos em até 1 dia útil. Você será avisado aqui no app.</p><button class="btn" onclick="go('contracts')">Ver meus contratos</button></div>`;
+ const names=['Documento com foto (frente)','Comprovante de renda','Selfie de confirmação'];
+ let c='';
+ if(r.step===1)c=`<h1>Confirme os valores</h1><div class="card hl"><div class="res"><span><small>Valor</small><b>${R0(v)}</b></span><span><small>Parcelas</small><b>${n}x</b></span><span><small>Parcela</small><b>${R(pmt(v,n))}</b></span></div></div><div class="card"><small>Total a pagar</small><div class="big" style="font-size:22px">${R(pmt(v,n)*n)}</div><small>Taxa de ${(RATE*100).toFixed(2).replace('.',',')}% a.m. · 1ª parcela em ${dt(1)}</small></div>`;
+ if(r.step===2)c=`<h1>Envie seus documentos</h1>${names.map((t,i)=>`<button class="up ${r.docs[i]?'done':''}" onclick="S.req.docs[${i}]=!S.req.docs[${i}];draw()">${r.docs[i]?'✓ '+t:'+ '+t}</button>`).join('')}`;
+ if(r.step===3)c=`<h1>Revise e confirme</h1><div class="card"><div class="par" style="padding-top:0"><span>Valor</span><b>${R0(v)}</b></div><div class="par"><span>Parcelas</span><b>${n}x de ${R(pmt(v,n))}</b></div><div class="par" style="border:0"><span>Documentos</span><span class="tag p">3 enviados</span></div></div><small style="display:block;margin-top:10px">Ao confirmar, você aceita os termos do contrato.</small>`;
+ const can=r.step!==2||r.docs.every(Boolean);
+ return bar+`<div class="body"><div class="steps">${[1,2,3].map(i=>`<i class="${i<=r.step?'on':''}"></i>`).join('')}</div><small>Passo ${r.step} de 3</small>${c}
+ <button class="btn" ${can?'':'disabled'} onclick="next()">${r.step===3?'Confirmar solicitação':'Continuar'}</button>
+ <button class="btn o" style="margin-top:8px" onclick="back()">Voltar</button></div>`},
+
+contracts:()=>{const c=S.c;
+ if(!c)return bar+`<div class="body"><h1>Meu empréstimo</h1><div class="card"><p class="mut">Você ainda não tem contratos ativos.</p><button class="btn" onclick="go('sim')">Simular empréstimo</button></div></div>`+tabbar();
+ const rows=[];for(let i=c.paid+1;i<=c.n;i++)rows.push(i);
+ const show=[c.paid>0?c.paid:null,...rows.slice(0,4)].filter(Boolean);
+ return bar+`<div class="body"><h1>Meu empréstimo</h1>
+ <div class="card hl"><small>Saldo devedor</small><div class="big" style="font-size:24px">${R(saldo())}</div><div class="prog"><i style="width:${c.paid/c.n*100}%"></i></div><small>${String(c.paid).padStart(2,'0')} de ${c.n} parcelas pagas</small></div>
+ <label style="margin-top:16px">Parcelas</label>
+ ${show.map(i=>{const st=i<=c.paid?'paga':i===c.paid+1?'em aberto':'a vencer';return`<div class="par"><span>${String(i).padStart(2,'0')} · ${dt(i-c.paid-1)}</span><b>${R(c.pm)}</b><span class="tag ${st==='paga'?'p':st==='em aberto'?'a':''}">${st}</span></div>`}).join('')}
+ ${c.paid<c.n?`<button class="btn" onclick="S.modal='pix';draw()">Pagar parcela (Pix)</button><button class="btn o" style="margin-top:8px" onclick="c_sel();S.modal='ant';draw()">Antecipar parcelas</button>`:'<p class="mut">Contrato quitado. Parabéns!</p>'}</div>`+tabbar()},
+
+profile:()=>bar+`<div class="body"><div class="head" style="justify-content:flex-start;gap:14px"><div class="avatar" style="width:56px;height:56px;font-size:22px">${S.user.name[0]}</div><div><b style="font-size:16px">${S.user.name}</b><br><small>CPF ${S.cpf||''}</small></div></div>
+ <div class="card"><div class="par" style="padding-top:0"><span>Limite total</span><b>${R0(S.total)}</b></div><div class="par"><span>Biometria</span><span class="tag a">ativa</span></div><div class="par" style="border:0"><span>Notificações</span><span class="tag a">ativas</span></div></div>
+ <button class="btn o" onclick="S.cpf='';go('login')">Sair</button></div>`+tabbar()
+};
+
+function modal(){
+ if(S.modal==='pix')return`<div class="sheet" onclick="if(event.target===this){S.modal=null;draw()}"><div><h1>Pagar com Pix</h1><small>Parcela ${String(S.c.paid+1).padStart(2,'0')} · ${R(S.c.pm)}</small><div class="pix">00020126580014BR.GOV.BCB.PIX0136nh-emprestimos-${String(S.c.paid+1).padStart(2,'0')}5204000053039865802BR</div><button class="btn" onclick="navigator.clipboard&&navigator.clipboard.writeText('pix-demo').catch(()=>{});toast('Código copiado')">Copiar código</button><button class="btn o" onclick="pay()">Já paguei</button></div></div>`;
+ if(S.modal==='ant'){const c=S.c;const open=[];for(let i=c.paid+2;i<=c.n;i++)open.push(i);const k=c.sel.length;const base=k*c.pm,desc=base*0.015*k/2;
+  return`<div class="sheet" onclick="if(event.target===this){S.modal=null;draw()}"><div><h1>Antecipar parcelas</h1><small>Desconto de juros nas parcelas selecionadas.</small>
+  <div style="max-height:220px;overflow:auto;margin-top:6px">${open.length?open.map(i=>`<label class="par ant" style="color:var(--ink);margin:0"><input type="checkbox" ${c.sel.includes(i)?'checked':''} onchange="tg(${i})"><span>Parcela ${String(i).padStart(2,'0')}</span><b>${R(c.pm)}</b></label>`).join(''):'<p class="mut">Sem parcelas para antecipar.</p>'}</div>
+  <div class="res card"><span><small>Subtotal</small><b>${R(base)}</b></span><span><small>Desconto</small><b style="color:var(--ok)">-${R(desc)}</b></span><span><small>A pagar</small><b>${R(base-desc)}</b></span></div>
+  <button class="btn" ${k?'':'disabled'} onclick="antecipa()">Antecipar ${k||''} parcela${k===1?'':'s'}</button></div></div>`}
+ return'';
+}
+function draw(){const a=$('#app');const st=a.querySelector('.body')?.scrollTop||0;
+ a.innerHTML=V[S.view]()+modal()+(S.toast?`<div class="toast" role="status">${S.toast}</div>`:'');
+ const b=a.querySelector('.body');if(b)b.scrollTop=st;if(S.view==='sim')upd()}
+function upd(){const {v,n}=S.sim,p=pmt(v,n);$('#sv')&&($('#sv').textContent=R0(v));
+ $('#res')&&($('#res').innerHTML=`<span><small>Parcela</small><b>${R(p)}</b></span><span><small>Taxa</small><b>${(RATE*100).toFixed(2).replace('.',',')}% a.m.</b></span><span><small>Total</small><b>${R(p*n)}</b></span>`)}
+function login(){const cpf=$('#cpf').value,pw=$('#pw').value;
+ if(!cpfOk(cpf)){S.err='Digite os 11 números do CPF.';return draw2(cpf,pw)}
+ if(pw.length<4){S.err='A senha precisa ter ao menos 4 caracteres.';return draw2(cpf,pw)}
+ S.err='';S.cpf=cpf;go('home')}
+function draw2(c,p){draw();$('#cpf').value=c;$('#pw').value=p}
+function next(){const r=S.req;if(r.step<3){r.step++;draw()}else{
+ S.c={n:S.sim.n,paid:0,pm:pmt(S.sim.v,S.sim.n),sel:[]};r.ok=true;draw()}}
+function back(){if(S.req.step>1){S.req.step--;draw()}else go('sim')}
+function pay(){S.c.paid++;S.modal=null;toast('Parcela paga com sucesso');}
+function c_sel(){S.c.sel=[]}
+function tg(i){const s=S.c.sel;s.includes(i)?s.splice(s.indexOf(i),1):s.push(i);draw()}
+function antecipa(){const k=S.c.sel.length;S.c.paid+=k+0;S.c.sel=[];S.modal=null;toast('Parcelas antecipadas com desconto')}
+draw();
+</script>
+</body>
+</html>
